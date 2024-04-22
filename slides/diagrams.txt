@@ -1,0 +1,23 @@
+# class Diagram
+
+@startuml
+Left to Right DIrection
+class User {
+    + id: Integer
+    + username: String
+    + password: String
+    ...
+}
+
+class Auction {
++ id: Interger
++ title: String
++ description: String
++ price: Float
++ imageURL: String
+}
+
+
+User "n" -- "n" Auction
+
+@enduml
