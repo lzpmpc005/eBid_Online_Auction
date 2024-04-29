@@ -32,7 +32,7 @@ SECRET_KEY = getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000"]
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -95,12 +95,12 @@ WSGI_APPLICATION = 'auth_system.wsgi.application'
 
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "LearnX",
-        "USER": getenv('DB_USER'),
-        "PASSWORD": getenv('DB_PASSWORD'),
-        "HOST": "localhost",
-        "PORT": "5432",
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "my_database",
+        "USER": "root",
+        "PASSWORD": "pass",
+        "HOST": "db",
+        "PORT": "3306",      
     }
 }
 

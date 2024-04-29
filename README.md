@@ -1,14 +1,13 @@
 # eBid | Online Auction
 
-## Online auction system with two backend servers and one frontend server. Backend auth_system connects with PostgreSQL and Backend main_server connects with MySQL.
+## Online auction system with two backend servers and one frontend server. Backend auth_system and Backend express_server both connect to MySQL.
 
 ## Table of contents[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#table-of-contents)
 
 - [Introduction](#introduction)
-- [Installation and Run](#install)
-  - [Install Node.js](#node.js)
-  - [Install PostgreSQL](#postgreSQL)
-  - [Clone the repository and Run](#run)
+- [Installation](#installation)
+  - [Install Docker]
+  - [Clone the repository]
 - [Features](#Features)
 - [Contribution](#Contribution)
 
@@ -26,92 +25,56 @@ This project is a web application for online auction. It has been implemented wi
 - password reset
 - create auctions
 - browser auctions
+- search/filter auctions
 
-## Installation and Run(#install)
+## Installtion[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#installation)
 
-### I. Install Node.js (#node.js)
-
-Please refer to  
- https://nodejs.org/en
-
-### II. Install PostgreSQL (#postgreSQL)
+### 1. Install Docker
 
 Please refer to  
- https://www.postgresqltutorial.com/postgresql-getting-started/install-postgresql/
+ https://www.docker.com/products/docker-desktop/
 
-Once installed, you can use the respective client tools to connect to the PostgreSQL database.
+> [!NOTE]
+> Remember to start the Docker desktop and keep it running.
 
-### III. Clone the repository and Run(#run)
-
-```bash
-git clone https://github.com/lzpmpc005/ZooManagementSystem.git
-```
-
-#### i. auth_system
-
-1. Navigate to the directory
+### 2. Clone the repository
 
 ```bash
-cd auth_system
+git clone https://github.com/lzpmpc005/eBid_Online_Auction.git
 ```
 
-2. Install dependencies using pip:
+### 3. Navigate to the project root directory
 
 ```bash
-pip install -r requirements.txt
+cd eBid_Online_Auction
 ```
 
-3. create a file ".env.local" and put the following value accordingly:
-
-DEBUG = True
-SECRET_KEY = 'djoser secret key'
-
-DOMAIN = 'localhost:3000'
-
-DB_USER = 'database username'
-DB_PASSWORD = 'database password'
-
-EMAIL_HOST_USER = 'your email address'
-EMAIL_HOST_PASSWORD = 'your email password'
-
-GOOGLE_OAUTH2_KEY = "your google oauth2 key"
-GOOGLE_OAUTH2_SECRET = "you secret"
-
-GITHUB_KEY = "your key"
-GITHUB_SECRET = "your secret"
-
-4. Perform database migration:
-
-```
-python manage.py makemigrations
-python manage.py migrate
-```
-
-5. Run the auth server:
-
-```
-python manage.py runserver
-```
-
-#### ii. Next.JS Frontend Server
-
-1. Navigate to the project
+### 4. Dockerize the project
 
 ```bash
-cd online_auction
+dokcer-compose build
 ```
 
-2. Install dependencies using npm:
+> [!NOTE]
+> First build could take serveral minutes.
+
+### 5. Run the image in Docker
 
 ```bash
- npm install
+dokcer-compose up -d
 ```
 
-3. Start frontend server:
+> [!NOTE]
+> You may need to manually go to your docker container and start auth_system again.
+
+### 6. Initialize the project
 
 ```bash
- npm run dev
+docker exec -it ebid_online_auction-frontend-1 node ./scripts/initialize.ts
 ```
+
+> [!NOTE]
+> This command will create Categories for this project.
 
 ## Features[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#Features)
 
@@ -123,6 +86,21 @@ cd online_auction
 - Login with Google/Github
 - Logout
 - Reset Password
+
+2. Auction Creation
+
+- Go to seller mode after login
+- Name you auction and continue
+- Customize your auction
+- Set up start price and close time
+- Publish the auction
+
+3. Browser Auctions
+
+- Go to Explore page after login
+- Check current auctions
+- Search wanted auctions by title
+- Fileter auctions by categories
 
 ---
 

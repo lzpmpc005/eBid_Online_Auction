@@ -1,0 +1,40 @@
+version: "3.12"
+
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: my_database
+    ports:
+      - "3306:3306"
+
+  auth_system:
+    build: ./auth_system
+    command: >
+      bash -c "python manage.py makemigrations &&
+               python manage.py migrate &&
+               python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./auth_system:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  backend:
+    build: ./express_backend
+    ports:
+      - 8080:8080
+    environment:
+      - DATABASE_URL=mysql://root:pass@db:3306/my_database
+    depends_on:
+      - db
+
+  frontend:
+    build: ./online_auction
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth_system
+      - backend

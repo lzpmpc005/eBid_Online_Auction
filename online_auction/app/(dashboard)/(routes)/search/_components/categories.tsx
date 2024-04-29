@@ -11,6 +11,11 @@ import {
   FcOldTimeCamera,
   FcLightAtTheEndOfTunnel,
   FcHome,
+  FcMenu,
+  FcKindle,
+  FcBookmark,
+  FcFolder,
+  FcPackage,
 } from "react-icons/fc";
 import { IconType } from "react-icons";
 
@@ -21,14 +26,14 @@ interface CategoriesProps {
 }
 
 const iconMap: Record<CategoryType["name"], IconType> = {
-  Cooking: FcHome,
+  Kitchen: FcHome,
   Filming: FcFilmReel,
-  Engineering: FcEngineering,
-  History: FcOldTimeCamera,
+  Tools: FcEngineering,
+  "Old things": FcOldTimeCamera,
   Music: FcMusic,
-  Psychology: FcLightAtTheEndOfTunnel,
-  "Data Science": FcStatistics,
-  "Computer Science": FcMultipleDevices,
+  Books: FcFolder,
+  Clothes: FcPackage,
+  Digital: FcMultipleDevices,
 };
 
 export const Categories = ({ items }: CategoriesProps) => {

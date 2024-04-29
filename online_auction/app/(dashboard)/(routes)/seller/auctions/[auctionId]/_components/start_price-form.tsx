@@ -23,14 +23,14 @@ import { auctionType } from "@/utils/types";
 
 interface PriceFormProps {
   initialData: {
-    price: number | null;
+    start_price: number | null;
   };
   auctionId: string;
   onAuctionUpdate: (auction: auctionType) => void;
 }
 
 const formSchema = z.object({
-  price: z.coerce.number(),
+  start_price: z.coerce.number(),
 });
 
 export const PriceForm = ({
@@ -38,7 +38,7 @@ export const PriceForm = ({
   auctionId,
   onAuctionUpdate,
 }: PriceFormProps) => {
-  const [price, setPrice] = useState(initialData.price);
+  const [start_price, setStartPrice] = useState(initialData.start_price);
   const [isEditing, setIsEditing] = useState(false);
 
   const toggleEdit = () => setIsEditing((current) => !current);
@@ -46,8 +46,10 @@ export const PriceForm = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      price:
-        initialData?.price !== null ? Number(initialData.price) : undefined,
+      start_price:
+        initialData?.start_price !== null
+          ? Number(initialData.start_price)
+          : undefined,
     },
   });
 
@@ -58,11 +60,12 @@ export const PriceForm = ({
       const userId = localStorage.getItem("userId");
       const response = await axios.patch(`/auctions/${auctionId}`, {
         ...values,
+        start_price: values.start_price,
         userId,
       });
-      setPrice(response.data.price);
+      setStartPrice(response.data.start_price);
       onAuctionUpdate(response.data);
-      toast.success("auction updated");
+      toast.success("auction start price updated");
       toggleEdit();
     } catch (error) {
       if (error instanceof Error) {
@@ -83,21 +86,26 @@ export const PriceForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        auction price
+        Start Price
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Cancel</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit price
+              Edit start price
             </>
           )}
         </Button>
       </div>
       {!isEditing && (
-        <p className={cn("text-sm mt-2", !price && "text-slate-500 italic")}>
-          {price ? formatPrice(price) : "Price unset"}
+        <p
+          className={cn(
+            "text-sm mt-2",
+            !start_price && "text-slate-500 italic"
+          )}
+        >
+          {start_price ? formatPrice(start_price) : "Start price unset"}
         </p>
       )}
       {isEditing && (
@@ -108,15 +116,15 @@ export const PriceForm = ({
           >
             <FormField
               control={form.control}
-              name="price"
+              name="start_price"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
                       type="number"
-                      step="0.01"
+                      step="0.1"
                       disabled={isSubmitting}
-                      placeholder="Set a price for your auction"
+                      placeholder="Set a start price for your auction"
                       {...field}
                     />
                   </FormControl>

@@ -1,4 +1,6 @@
 # Compiled class file
+.backend/
+.main_server/
 auth_system/data/
 .vscode
 *.class

@@ -11,13 +11,116 @@ class User {
 
 class Auction {
 + id: Interger
++ ownerId: User
 + title: String
 + description: String
-+ price: Float
++ category: Category
++ start_price: Float
++ current_price: Float
++ current_bidder: User
 + imageURL: String
++ isPublished: Boolean
++ close_time: Datetime
++ createdAt: Datetime
++ updatedAt: Datetime
+
+}
+
+class Category {
++ id: Interger
++ name: String
+}
+
+class Bid {
++ id: Integer
++ user: User
++ auction: Auction
++ bit_price: Float
++ timestamp: Datetime
 }
 
 
 User "n" -- "n" Auction
+Auction "n" -- "1" Category
+Auction "1" -- "1" Bid
+User "n" -- "1" Bid
+
+@enduml
+
+
+
+# Auction  Management Use Case
+@startuml
+left to right direction
+skinparam actor {
+    BackgroundColor<<User>> PaleGreen
+    BorderColor<<User>> Green
+}
+
+actor User as User
+actor Server as S
+
+
+rectangle "Auction Management" {
+  usecase "Login" as UC1
+  usecase "Create Auction" as UC2
+  usecase "Fill Information Form" as UC3
+  usecase "Save Information" as UC5
+  usecase "Update Auction" as UC6
+  usecase "Update Information" as UC7
+  usecase "Delete Auction" as UC10
+}
+
+User --> UC1
+UC1 --> UC2
+UC2 --> UC3
+S --> UC3
+UC3 --> UC5
+S --> UC5
+UC1 --> UC6
+UC6 --> UC7
+S --> UC7
+UC7 --> UC5
+UC1 --> UC10
+S --> UC1
+
+@enduml
+
+
+
+# Auction Management Sequence
+@startuml
+actor User as User
+participant FrontendServer as FS
+participant AuthServer as B
+participant MainServer as BS
+
+== Auction Management Module ==
+User -> FS: Login
+FS -> B: Send Credentials for validation
+
+alt user account information correct
+activate B
+    B -> B: Verify Account
+
+    B -> FS: Login and return JWT
+deactivate B
+    FS -> User: Give access to the system
+else user account information incorrect
+activate B
+    B -> B: Verify Account
+    B -> FS: Block Operations
+deactivate B
+    FS -> User: Alert Error
+end
+
+User -> FS: Create/Update Auction
+
+FS -> FS: Validate Information
+FS -> BS: Send Information
+BS -> BS: Save Information
+BS -> FS: Return new Auction information
+FS -> User: Display updated information
+
 
 @enduml

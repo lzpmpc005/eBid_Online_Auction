@@ -15,11 +15,12 @@ import { TitleForm } from "./_components/title-form";
 import { DescriptionForm } from "./_components/description-form";
 import { ImageForm } from "./_components/image-form";
 import { CategoryForm } from "./_components/category-form";
-import { PriceForm } from "./_components/price-form";
+import { PriceForm } from "./_components/start_price-form";
 import { Actions } from "./_components/actions";
 import { useEffect, useState } from "react";
 import axios from "@/utils/axios";
 import { auctionType, CategoryType } from "@/utils/types";
+import { CloseTimeForm } from "./_components/close-time-form";
 
 const auctionIdPage = ({ params }: { params: { auctionId: string } }) => {
   const [auction, setauction] = useState<auctionType | null>(null);
@@ -61,8 +62,9 @@ const auctionIdPage = ({ params }: { params: { auctionId: string } }) => {
           updatedauction.title,
           updatedauction.description,
           updatedauction.imageUrl,
-          updatedauction.price,
+          updatedauction.start_price,
           updatedauction.categoryId,
+          updatedauction.close_time,
         ]
       : [];
 
@@ -93,7 +95,7 @@ const auctionIdPage = ({ params }: { params: { auctionId: string } }) => {
               disabled={!isComplete}
               auctionId={params.auctionId}
               isPublished={auction.isPublished}
-              onauctionUpdate={handleauctionUpdate}
+              onAuctionUpdate={handleauctionUpdate}
             />
           )}
         </div>
@@ -112,7 +114,7 @@ const auctionIdPage = ({ params }: { params: { auctionId: string } }) => {
                     description: auction.description || "",
                   }}
                   auctionId={auction.id}
-                  onauctionUpdate={handleauctionUpdate}
+                  onAuctionUpdate={handleauctionUpdate}
                 />
                 <ImageForm
                   initialData={{
@@ -120,7 +122,7 @@ const auctionIdPage = ({ params }: { params: { auctionId: string } }) => {
                     imageUrl: auction.imageUrl || "",
                   }}
                   auctionId={auction.id}
-                  onauctionUpdate={handleauctionUpdate}
+                  onAuctionUpdate={handleauctionUpdate}
                 />
                 {categories.length > 0 && (
                   <CategoryForm
@@ -130,7 +132,7 @@ const auctionIdPage = ({ params }: { params: { auctionId: string } }) => {
                       label: category.name,
                       value: category.id,
                     }))}
-                    onauctionUpdate={handleauctionUpdate}
+                    onAuctionUpdate={handleauctionUpdate}
                   />
                 )}
               </>
@@ -140,14 +142,25 @@ const auctionIdPage = ({ params }: { params: { auctionId: string } }) => {
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={CircleDollarSign} />
-                <h2 className="text-xl">Sell your knowledge</h2>
+                <h2 className="text-xl">Sale your auction</h2>
               </div>
               {auction && (
-                <PriceForm
-                  initialData={auction}
-                  auctionId={auction.id}
-                  onauctionUpdate={handleauctionUpdate}
-                />
+                <>
+                  <PriceForm
+                    initialData={{ start_price: auction.start_price }}
+                    auctionId={auction.id}
+                    onAuctionUpdate={handleauctionUpdate}
+                  />
+                  <CloseTimeForm
+                    initialData={{
+                      close_time: auction.close_time
+                        ? new Date(auction.close_time)
+                        : null,
+                    }}
+                    auctionId={auction.id}
+                    onAuctionUpdate={handleauctionUpdate}
+                  />
+                </>
               )}
             </div>
           </div>

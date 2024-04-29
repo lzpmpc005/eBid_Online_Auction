@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:pass@db:3306/my_database"
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  auctions  Auction[]
+  
+  @@map("Category")
+}
+
+model Auction {
+  id        String   @id @default(uuid())
+  ownerId        String
+  title          String
+  description    String?  @db.Text
+  imageUrl       String?  
+  start_price    Float?
+  current_price  Float?
+  current_bidder String?  
+  isPublished    Boolean  @default(false)
+  categoryId     String?
+  category       Category? @relation(fields: [categoryId], references: [id])
+  close_time     DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  bids           Bid[]
+
+  @@map("Auction")
+  @@index([categoryId])
+}
+
+model Bid {
+  id        String   @id @default(uuid())
+  userId    String
+  auctionId String
+  auction   Auction  @relation(fields: [auctionId], references: [id])
+  bid_price Float
+  timestamp DateTime @default(now())
+
+  @@map("Bid")
+  @@index([auctionId])
+}
+
+model BankAccount {
+  id        String   @id @default(uuid())
+  card_number  String  @db.VarChar(16)
+  card_holder  String  @db.VarChar(100)
+  expire_year  Int
+  expire_month Int
+  cvv          String  @db.VarChar(3)
+  balance      Decimal @db.Decimal(10, 2)
+}
