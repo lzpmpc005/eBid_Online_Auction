@@ -61,7 +61,7 @@ dokcer-compose build
 ### 5. Run the image in Docker
 
 ```bash
-dokcer-compose up -d
+docker-compose up -d
 ```
 
 > [!NOTE]

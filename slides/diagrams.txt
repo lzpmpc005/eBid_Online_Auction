@@ -49,7 +49,7 @@ User "n" -- "1" Bid
 
 
 
-# Auction  Management Use Case
+# Auction  Management Use Case v1
 @startuml
 left to right direction
 skinparam actor {
@@ -122,5 +122,48 @@ BS -> BS: Save Information
 BS -> FS: Return new Auction information
 FS -> User: Display updated information
 
+
+@enduml
+
+# Auction  Management Use Case v2
+
+@startuml
+left to right direction
+skinparam actor {
+    BackgroundColor<<User>> PaleGreen
+    BorderColor<<User>> Green
+}
+
+actor User as User
+actor Server as S
+
+
+rectangle "Auction Management" {
+  usecase "Login" as UC1
+  usecase "Create Auction" as UC2
+  usecase "Fill Information Form" as UC3
+  usecase "Save Information" as UC5
+  usecase "Update Auction" as UC6
+  usecase "Update Information" as UC7
+  usecase "Delete Auction" as UC10
+  usecase "Switch to Seller Mode" as UC11
+  usecase "Browser Auction" as UC12
+  usecase "Attend Bidding" as UC13
+}
+
+User --> UC1
+UC1 --> UC11
+UC11 --> UC2
+UC2 --> UC3
+UC11 --> UC6
+UC11 --> UC10
+S --> UC3
+UC3 --> UC5
+S --> UC5
+UC6 --> UC7
+S --> UC7
+UC7 --> UC5
+User --> UC12
+UC1 --> UC13
 
 @enduml
