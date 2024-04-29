@@ -3,13 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { AuctionSidebar } from "./_components/auction-sidebar";
-import { AuctionNavbar } from "./_components/auction-navbar";
-
 import axios from "@/utils/axios";
 import { toast } from "react-toastify";
-import { difference } from "next/dist/build/utils";
-import { useSelector } from "react-redux";
 
 const AuctionLayout = ({
   children,
@@ -56,12 +51,6 @@ const AuctionLayout = ({
 
   return (
     <div className="h-full">
-      <div className="h-[80px] md:pl-80 fixed inset-y-0 w-full z-50">
-        <AuctionNavbar auction={auction} />
-      </div>
-      <div className="hidden md:flex h-full w-80 flex-col fixed inset-y-0 z-50">
-        <AuctionSidebar auction={auction} />
-      </div>
       <main className="md:pl-80 pt-[80px] h-full">{children}</main>
     </div>
   );

@@ -1,21 +1,21 @@
 const axios = require("axios");
 
 const categories = [
-  { name: "Computer Science" },
-  { name: "Data Science" },
-  { name: "Engineering" },
+  { name: "Digital" },
+  { name: "Clothes" },
+  { name: "Tools" },
   { name: "Filming" },
   { name: "Music" },
-  { name: "Cooking" },
-  { name: "History" },
-  { name: "Psychology" },
+  { name: "Kitchen" },
+  { name: "Old things" },
+  { name: "Books" },
 ];
 
 async function createCategories() {
   try {
     categories.forEach(async (category) => {
       const response = await axios.post(
-        "http://localhost:8080/api/create-categories",
+        "http://backend:8080/api/create-categories",
         category
       );
     });
