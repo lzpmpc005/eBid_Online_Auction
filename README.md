@@ -43,13 +43,46 @@ Please refer to
 git clone https://github.com/lzpmpc005/eBid_Online_Auction.git
 ```
 
-### 3. Navigate to the project root directory
+### 3. Customize .env.local
+
+(1) go to "online_auction" directory, create a file named ".env.local" and paste the following inside and save. For Uploadthing secret and id, just Sign up for uploadthing and create a new app, you will see https://uploadthing.com/dashboard.
+
+```bash
+NEXT_PUBLIC_HOST=http://localhost:8000
+NEXT_PUBLIC_CONTENT_HOST=http://localhost:8080/api
+NEXT_PUBLIC_LOGO="/logo.png"
+
+UPLOADTHING_SECRET=Your SECRET
+UPLOADTHING_APP_ID=Your ID
+```
+
+(2) go to "auth_system" directory, create a file named ".env.local" and paste the following inside and save. You don't need Google and Github keys if you don't need Login with Google and Github.
+
+```bash
+DEBUG = True
+
+DOMAIN = 'localhost:3000'
+
+EMAIL_HOST_USER = 'your email account'
+EMAIL_HOST_PASSWORD = 'email password'
+
+GOOGLE_OAUTH2_KEY = "Your Key"
+GOOGLE_OAUTH2_SECRET = "Your Secret"
+
+GITHUB_KEY = "Your Key"
+GITHUB_SECRET = "Your Secret"
+```
+
+> [!NOTE]
+> If you don't want to customize you Google and Github key and secret, the login with Google and Github won't work, but the normal login will work fine.
+
+### 4. Navigate to the project root directory
 
 ```bash
 cd eBid_Online_Auction
 ```
 
-### 4. Dockerize the project
+### 5. Dockerize the project
 
 ```bash
 dokcer-compose build
@@ -58,7 +91,7 @@ dokcer-compose build
 > [!NOTE]
 > First build could take serveral minutes.
 
-### 5. Run the image in Docker
+### 6. Run the image in Docker
 
 ```bash
 docker-compose up -d
@@ -67,7 +100,7 @@ docker-compose up -d
 > [!NOTE]
 > You may need to manually go to your docker container and start auth_system again.
 
-### 6. Initialize the project
+### 7. Initialize the project
 
 ```bash
 docker exec -it ebid_online_auction-frontend-1 node ./scripts/initialize.ts
