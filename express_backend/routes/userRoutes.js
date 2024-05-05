@@ -1,82 +1,31 @@
 const express = require("express");
 const router = express.Router();
 
-//retrieve user specific course
-router.get("/api/courses/:courseId/user/:userId", async (req, res) => {
+//retrieve user specific auction
+router.get("/api/auctions/:auctionId/user/:userId", async (req, res) => {
   try {
     const prisma = req.prisma;
-    const { courseId, userId } = req.params;
+    const { auctionId, userId } = req.params;
 
-    const course = await prisma.course.findUnique({
+    const auction = await prisma.auction.findUnique({
       where: {
-        id: courseId,
-      },
-      include: {
-        chapters: {
-          where: {
-            isPublished: true,
-          },
-          include: {
-            userProgress: {
-              where: {
-                userId,
-              },
-            },
-          },
-          orderBy: {
-            position: "asc",
-          },
-        },
+        id: auctionId,
       },
     });
 
-    if (!course) {
-      return res.status(404).json({ error: "Course not found" });
+    if (!auction) {
+      return res.status(404).json({ error: "auction not found" });
     }
 
-    res.json(course);
+    res.json(auction);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
 });
 
-//retrieve user completed chapters
-router.get("/api/users/:userId/completed-chapters", async (req, res) => {
-  try {
-    const prisma = req.prisma;
-    const { userId } = req.params;
-    const { publishedChapterIds } = req.query;
-
-    if (!userId) {
-      return res.status(400).send("Unauthorized");
-    }
-
-    if (!publishedChapterIds || !Array.isArray(publishedChapterIds)) {
-      return res
-        .status(400)
-        .send("Published chapter IDs are required and should be an array");
-    }
-
-    const validCompletedChapters = await prisma.userProgress.count({
-      where: {
-        userId: userId,
-        chapterId: {
-          in: publishedChapterIds,
-        },
-        isCompleted: true,
-      },
-    });
-
-    return res.json({ validCompletedChapters });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Something went wrong" });
-  }
-});
-
-// retrieve all courses for a user(teacher)
-router.get("/api/courses", async (req, res) => {
+// retrieve all auctions for a user(seller)
+router.get("/api/auctions", async (req, res) => {
   try {
     const prisma = req.prisma;
     const { userId } = req.query;
@@ -85,7 +34,7 @@ router.get("/api/courses", async (req, res) => {
       return res.status(400).send("Unauthorized");
     }
 
-    const courses = await prisma.course.findMany({
+    const auctions = await prisma.auction.findMany({
       where: {
         userId: userId,
       },
@@ -94,15 +43,15 @@ router.get("/api/courses", async (req, res) => {
       },
     });
 
-    return res.json(courses);
+    return res.json(auctions);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ error: "Something went wrong" });
   }
 });
 
-// retrieve all purchased courses for a user
-router.get("/api/users/:userId/purchased-courses", async (req, res) => {
+// retrieve all purchased auctions for a user
+router.get("/api/users/:userId/purchased-auctions", async (req, res) => {
   try {
     const prisma = req.prisma;
     const { userId } = req.params;
@@ -111,30 +60,25 @@ router.get("/api/users/:userId/purchased-courses", async (req, res) => {
       return res.status(400).send("Unauthorized");
     }
 
-    const purchasedCourses = await prisma.purchase.findMany({
+    const purchasedauctions = await prisma.purchase.findMany({
       where: {
         userId: userId,
       },
       select: {
-        course: {
+        auction: {
           include: {
             category: true,
-            chapters: {
-              where: {
-                isPublished: true,
-              },
-            },
           },
         },
       },
     });
 
-    return res.json(purchasedCourses);
+    return res.json(purchasedauctions);
   } catch (error) {
     console.error(error);
     return res
       .status(500)
-      .json({ error: "Error in retrieving purchasedCourses" });
+      .json({ error: "Error in retrieving purchasedauctions" });
   }
 });
 
