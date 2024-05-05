@@ -1,28 +1,28 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/api/courses/:courseId/price", async (req, res) => {
+router.get("/api/auctions/:auctionId/price", async (req, res) => {
   try {
     const prisma = req.prisma;
-    const { courseId } = req.params;
+    const { auctionId } = req.params;
 
-    const course = await prisma.course.findUnique({
+    const auction = await prisma.auction.findUnique({
       where: {
         isPublished: true,
-        id: courseId,
+        id: auctionId,
       },
       select: {
         price: true,
       },
     });
 
-    if (!course) {
+    if (!auction) {
       return res
         .status(404)
-        .json({ error: "Course not found or not published" });
+        .json({ error: "auction not found or not published" });
     }
 
-    res.json(course);
+    res.json(auction);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: error.message });
@@ -30,29 +30,32 @@ router.get("/api/courses/:courseId/price", async (req, res) => {
 });
 
 // check purchase status
-router.get("/api/purchases/user/:userId/course/:courseId", async (req, res) => {
-  try {
-    const prisma = req.prisma;
-    const { userId, courseId } = req.params;
+router.get(
+  "/api/purchases/user/:userId/auction/:auctionId",
+  async (req, res) => {
+    try {
+      const prisma = req.prisma;
+      const { userId, auctionId } = req.params;
 
-    let purchase = await prisma.purchase.findUnique({
-      where: {
-        userId_courseId: {
-          userId,
-          courseId,
+      let purchase = await prisma.purchase.findUnique({
+        where: {
+          userId_auctionId: {
+            userId,
+            auctionId,
+          },
         },
-      },
-    });
+      });
 
-    if (!purchase) {
-      purchase = null;
+      if (!purchase) {
+        purchase = null;
+      }
+
+      res.json(purchase);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: error.message });
     }
-
-    res.json(purchase);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.message });
   }
-});
+);
 
 module.exports = router;

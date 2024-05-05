@@ -45,7 +45,7 @@ model Auction {
 model Bid {
   id        String   @id @default(uuid())
   userId    String
-  auctionId String
+  auctionId String  @map("auction_id")
   auction   Auction  @relation(fields: [auctionId], references: [id])
   bid_price Float
   timestamp DateTime @default(now())
@@ -62,4 +62,15 @@ model BankAccount {
   expire_month Int
   cvv          String  @db.VarChar(3)
   balance      Decimal @db.Decimal(10, 2)
+}
+
+model UserAccount {
+  id          String   @id @default(uuid())
+  email       String   @unique
+  username    String
+  is_active   Boolean  @default(true)
+  is_staff    Boolean  @default(false)
+  is_superuser Boolean @default(false)
+  
+  @@map("accountApp_useraccount")
 }

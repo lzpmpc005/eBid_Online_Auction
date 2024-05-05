@@ -5,7 +5,7 @@ router.patch("/api/auctions/:auctionId", async (req, res) => {
   try {
     const prisma = req.prisma;
     const { auctionId } = req.params;
-    const { userId, ...values } = req.body;
+    const { userId, current_bidder, ...values } = req.body;
 
     if (!userId) {
       return res.status(401).send("Unauthorized");
@@ -21,10 +21,26 @@ router.patch("/api/auctions/:auctionId", async (req, res) => {
       return res.status(404).json({ error: "auction not found" });
     }
 
+    if (values.current_price <= auction.current_price) {
+      return res
+        .status(400)
+        .json({ error: "Someone else already bid on this price or higher" });
+    }
+
     const updatedauction = await prisma.auction.update({
       where: { id: auctionId },
-      data: values,
+      data: { ...values, current_bidder },
     });
+
+    if (current_bidder) {
+      await prisma.bid.create({
+        data: {
+          userId: current_bidder,
+          auctionId: auctionId,
+          bid_price: values.current_price,
+        },
+      });
+    }
 
     res.json(updatedauction);
   } catch (error) {

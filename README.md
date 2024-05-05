@@ -26,6 +26,7 @@ This project is a web application for online auction. It has been implemented wi
 - create auctions
 - browser auctions
 - search/filter auctions
+- bid on auctions
 
 ## Installtion[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#installation)
 
@@ -45,7 +46,7 @@ git clone https://github.com/lzpmpc005/eBid_Online_Auction.git
 
 ### 3. Customize .env.local
 
-(1) go to "online_auction" directory, create a file named ".env.local" and paste the following inside and save. For Uploadthing secret and id, just Sign up for uploadthing and create a new app, you will see https://uploadthing.com/dashboard.
+(1) go to "online_auction" directory, create a file named ".env.local" and paste the following inside and save. Remember to change the SECRET and ID to your own. For Uploadthing secret and id, just Sign up for uploadthing and create a new app, you will see https://uploadthing.com/dashboard.
 
 ```bash
 NEXT_PUBLIC_HOST=http://localhost:8000
@@ -56,15 +57,15 @@ UPLOADTHING_SECRET=Your SECRET
 UPLOADTHING_APP_ID=Your ID
 ```
 
-(2) go to "auth_system" directory, create a file named ".env.local" and paste the following inside and save. You don't need Google and Github keys if you don't need Login with Google and Github.
+(2) go to "auth_system" directory, create a file named ".env.local" and paste the following inside and save. Remember to change the Keys and SECRETs to your own. You don't need Google and Github keys if you don't need Login with Google and Github.
 
 ```bash
 DEBUG = True
 
 DOMAIN = 'localhost:3000'
 
-EMAIL_HOST_USER = 'your email account'
-EMAIL_HOST_PASSWORD = 'email password'
+EMAIL_HOST_USER = 'change to your email account'
+EMAIL_HOST_PASSWORD = 'change to your email password'
 
 GOOGLE_OAUTH2_KEY = "Your Key"
 GOOGLE_OAUTH2_SECRET = "Your Secret"
@@ -134,6 +135,11 @@ docker exec -it ebid_online_auction-frontend-1 node ./scripts/initialize.ts
 - Check current auctions
 - Search wanted auctions by title
 - Fileter auctions by categories
+
+4. Bid on Auction
+
+- Click on an Auction
+- Bid on it based on current_price
 
 ---
 
