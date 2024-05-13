@@ -27,6 +27,7 @@ This project is a web application for online auction. It has been implemented wi
 - browser auctions
 - search/filter auctions
 - bid on auctions
+- winner notification
 
 ## Installtion[![](https://raw.githubusercontent.com/aregtech/areg-sdk/master/docs/img/pin.svg)](#installation)
 
@@ -140,6 +141,10 @@ docker exec -it ebid_online_auction-frontend-1 node ./scripts/initialize.ts
 
 - Click on an Auction
 - Bid on it based on current_price
+
+5. Winner Notification
+
+- Notify winner by email -when auction closes
 
 ---
 
